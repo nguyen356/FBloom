@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import {Link, useNavigate } from 'react-router-dom';
+
+
 export default function SignUp() {
-  const [formData, setFormData] = useState({})
+  const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -20,11 +22,11 @@ export default function SignUp() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body:JSON.stringify(formData),
+        body: JSON.stringify(formData),
       });
       const data = await res.json();
       console.log(data);
-      if (data.error === false){
+      if (data.success === false){
         setLoading(false);
         setError(data.message);
         return;
@@ -43,7 +45,9 @@ export default function SignUp() {
       <form onSubmit={handleSubmit} className='flex flex-col gap-3'>
       <input type='text' placeholder='username' className='border p-3 rounded-lg' id='username' onChange={handleChange}/>
       <form className='flex flex-col gap-3'/>
+
       <input type='email' placeholder='email' className='border p-3 rounded-lg' id='email' onChange={handleChange}/>
+
       <form className='flex flex-col gap-3'/>
       <input type='password' placeholder='password' className='border p-3 rounded-lg' id='password' onChange={handleChange}/>
       <button disabled={loading} className='bg-slate-500 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'> {loading ? 'Loading....' : 'Sign Up'}</button>

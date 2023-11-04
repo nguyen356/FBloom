@@ -1,10 +1,15 @@
 import { useState } from 'react';
 import {Link, useNavigate } from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
+import { signInStart, signInFailure,signInSuccess } from '../redux/user/userSlice';
+
+
+
 export default function SignUp() {
-  const [formData, setFormData] = useState({})
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({});
+  const { loading, error} = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleChange = (e) => {
   setFormData({
     ...formData,
@@ -14,7 +19,7 @@ export default function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
+      dispatch(signInStart());
       const res = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: {
@@ -24,17 +29,14 @@ export default function SignUp() {
       });
       const data = await res.json();
       console.log(data);
-      if (data.error === false){
-        setLoading(false);
-        setError(data.message);
+      if (data.success === false) {
+        dispatch(signInFailure(data.message));
         return;
       }
-      setLoading(false);
-      setError(null);
+      dispatch(signInSuccess(data));
       navigate('/');
     } catch (error) {
-      setLoading(false);
-      setError(error.message);
+      dispatch(signInFailure(error.message));
     }
   };
   return (
@@ -42,13 +44,15 @@ export default function SignUp() {
       <h1 className='text-3xl text-center font-mono my-7'>Sign In</h1>
       <form onSubmit={handleSubmit} className='flex flex-col gap-3'>
       <input type='email' placeholder='email' className='border p-3 rounded-lg' id='email' onChange={handleChange}/>
+
       <form className='flex flex-col gap-3'/>
       <input type='password' placeholder='password' className='border p-3 rounded-lg' id='password' onChange={handleChange}/>
+
       <button disabled={loading} className='bg-slate-500 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'> {loading ? 'Loading....' : 'Sign In'}</button>
       </form>
       <div className='flex gap-3 mt-5'>
         <p>Don't Have Account? </p>
-        <Link to={"/signin"}>
+        <Link to={"/sign-up"}>
         <span className='text-blue-700'> Sign Up Today!</span>
         </Link>
       </div>
