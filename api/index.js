@@ -15,6 +15,7 @@ console.log('Connect to Database!');
 })
 
 const __dirname = path.resolve();
+
 const app = express();
 
 app.use(express.json());
