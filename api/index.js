@@ -35,10 +35,10 @@ app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/listing", listingRouter);
 
-app.use(express.static(path.join(__dirname, '/sanctuary/build')));
+app.use(express.static(path.join(__dirname, '/sanctuary/dist')));
 
 app.get('*', (req,res) =>{
-    res.sendFile(path.join(__dirname, 'sanctuary', 'build', 'index.html'));
+    res.sendFile(path.join(__dirname, 'sanctuary', 'dist', 'index.html'));
 })
 
 
